@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.list {
+    padding: 5px;
+
+}
+
+.list__header {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr 1.5fr 1fr 1fr;
+    align-items: center;
+    padding: 10px;
+    background-color: rgb(209, 209, 209);
+
+}
+
+.list__header img{
+    width: 25px;
+}
+
+.header__controls {
+    display: flex;
+    justify-content: space-between;
+}
+
+.header__controls svg {
+    width: 30px;
+}
+
+.controls div {
+    padding: 0 5px;
+}
+
+.notes {
+    margin-top: 5px;
+}
+
+.note__text {
+    white-space: nowrap; 
+    overflow: hidden; 
+    padding: 5px; 
+    text-overflow: ellipsis; 
+}
+
+.note__text:hover {
+    background: #7ed3e9;
+    white-space: normal; 
+}
+
+.note__text:disabled {
+    background-color: transparent;
+    border: none;
+}   
+
+.notes__item {
+    display: grid;
+    grid-template-columns: 1.3fr 0.8fr 0.8fr 1.3fr 0.8fr 0.8fr; 
+    align-items: center;
+    height: 50px;
+    background-color: #7ed3e9;
+    padding: 5px;
+}
+
+.note__name {
+    display: flex;
+
+}
+
+.note__name p {
+    white-space: nowrap; 
+    overflow: hidden; 
+    padding: 5px; 
+    text-overflow: ellipsis; 
+}
+
+.note__name p:hover {
+    white-space: nowrap; 
+    overflow: hidden; 
+    padding: 5px; 
+    text-overflow: ellipsis; 
+}
+
+.note__icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgb(70, 68, 68);
+}
+
+.note__controls svg {
+    width: 20px;
+}
+
