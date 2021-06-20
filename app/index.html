@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
+   <div class="note__block">
     <div class="notes_list list">
-        <div class="list__header" id="a">
+        <div class="list__header">
             <div class="list__header--item">Name</div>
             <div class="list__header--item">Created</div>
             <div class="list__header--item">Category</div>
@@ -26,9 +27,19 @@
         <div class="list__content notes" id="listContentBlock">
 
         </div>
+        <button class="list__addBtn" id="addNewNoteBtn">Add new note</button>
     </div>
-    
+    <div class="note__statistic statistic">
+        <div class="statistic__header">
+            <div class="statistic__header--item">Note Category</div>
+            <div class="statistic__header--item">Active</div>
+            <div class="statistic__header--item">Archived</div>
+        </div>
+        <div class="statistic__list" id="statisticList"></div>
+    </div>  
+   </div>  
 <script type="module" src="./main.js"></script>
+<script type="module" src="./handlers.js"></script>
 </body>
 </html> 
 

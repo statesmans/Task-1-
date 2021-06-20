@@ -4,9 +4,18 @@
 }
 
 body {
-    display: flex;
-    justify-content: center;
+
     padding: 10px;
+}
+
+#editBtn {
+    padding: 5px;
+}
+
+.note__block {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .list {
@@ -16,7 +25,7 @@ body {
 
 .list__header {
     display: grid;
-    grid-template-columns: 1.5fr 1fr 1fr 1.5fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 0.5fr;
     align-items: center;
     padding: 10px;
     background-color: rgb(209, 209, 209);
@@ -29,7 +38,12 @@ body {
 
 .header__controls {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+
+}
+
+.header__controls--item {
+    margin-right: 15px;
 }
 
 .header__controls svg {
@@ -63,11 +77,12 @@ body {
 
 .notes__item {
     display: grid;
-    grid-template-columns: 1.3fr 0.8fr 0.8fr 1.3fr 0.8fr 0.8fr; 
+    grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 0.5fr; 
     align-items: center;
     height: 50px;
     background-color: #7ed3e9;
-    padding: 5px;
+    padding: 10px;
+    margin: 5px 0;
 }
 
 .note__name {
@@ -93,10 +108,57 @@ body {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: rgb(70, 68, 68);
+    background-color: rgb(90, 90, 90);
+}
+
+.note__controls {
+    display: flex;
+    justify-content: flex-end;
+    
 }
 
 .note__controls svg {
     width: 20px;
+    margin-left: 15px;
 }
 
+.statistic__header {
+    display: grid;
+    grid-template-columns: 4fr 2fr 2fr;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    background-color: rgb(209, 209, 209);
+}
+
+.statistic {
+    margin-top: 50px;
+
+}
+
+.statistic__list img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgb(90, 90, 90);
+}
+
+.statistics__list--item {
+    display: grid;
+    grid-template-columns: 4fr 2fr 2fr;
+    align-items: center;
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: rgb(66, 172, 190);
+}
+
+.statistics__list--name {
+    display: flex;
+    align-items: center;
+}
+
+.statistics__list--name img {
+    padding: 5px;
+    margin-right: 10px;
+}
