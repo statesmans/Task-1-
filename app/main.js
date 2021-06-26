@@ -1,7 +1,9 @@
-import { renderNoteList } from './render.js'
-import { store } from './store.js'
-/* import { toggleInputDisableHandler } from './handlers.js' */
- 
+import { reRenderNotes } from './store.js'
+import { addNewNoteListener, showArchiveListener } from './listeners.js'
 
-renderNoteList(store)/* 
-toggleInputDisableHandler() */
+
+
+
+reRenderNotes()
+addNewNoteListener()
+showArchiveListener()

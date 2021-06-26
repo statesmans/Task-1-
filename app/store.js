@@ -1,11 +1,17 @@
-import { renderNoteList } from "./render.js";
+import { renderNoteList } from './render.js';
+import { imagePaths } from './constants.js'
 
-const EDIT_NOTE = 'EDIT_NOTE'
-const ARCHIVE_NOTE = 'ARCHIVE_NOTE'
-const DELETE_NOTE = 'DELETE_NOTE'
+const EDIT_NOTE = 'EDIT_NOTE';
+const ARCHIVE_NOTE = 'ARCHIVE_NOTE';
+const SHOW_ARCHIVE_NOTE = 'SHOW_ARCHIVE_NOTE';
+const HIDE_ARCHIVE_NOTE = 'HIDE_ARCHIVE_NOTE';
+const UNARCHIVE_NOTE = 'UNARCHIVE_NOTE';
+const DELETE_NOTE = 'DELETE_NOTE';
+const ADD_NOTE = 'ADD_NOTE';
 
 
 export let store = {
+    showArchived: false,
     categoriesList: ['Task', 'Quote', 'Idea', 'Random Thought'],
     listData:  [
         {
@@ -69,62 +75,102 @@ export let store = {
             category: 'Task',
             content: 'Tomatoes, Bread',
             schedule: '',
-            isArchived: false
+            isArchived: true
         }
-    ],
+    ]
 
-    noteIconPath: {
-        task: 'images/task.png',
-        randomThought: 'images/thought.png',
-        idea: 'images/idea.png',
-        quote: 'images/quote.png',
-        archiveBtn: 'images/archiveBtn.svg',
-        editBtn: 'images/edit.svg',
-        deleteBtn: 'images/delete.svg'
-
-    }
 };
 
-export const editNoteReducer = (action) => {
-    
+export const editNoteReducer = (action = {type: ''}) => {
     switch (action.type) {
+        
         case ARCHIVE_NOTE: {
             const notesList = store.listData.map(el => {
 
                 if(el.id == action.noteId) {
-                    return {...el, isArchived: !el.isArchived}
+                    return {...el, isArchived: true}
+                   
                 } else {
                     return el
                 }
             })
-                store.listData = [...notesList, store.noteIconPath]
-                renderNoteList(store)
+            store.listData = [...notesList]
+            reRenderNotes()
             break;
         }   
+        case UNARCHIVE_NOTE: {
+            let a = 0
+            const notesList = store.listData.map((el, i) => {
+
+                if(el.id == action.noteId) {
+                    a = i
+                    return {...el, isArchived: false}
+                    
+                } else {
+                    return el
+                }
+            })
+            store.listData = [...notesList]
+            reRenderNotes()
+            break;
+        }
+        case SHOW_ARCHIVE_NOTE: {
+            store.showArchived = true
+            reRenderNotes()
+            break;
+        }
+        case HIDE_ARCHIVE_NOTE: {
+            store.showArchived = false
+            reRenderNotes()
+            break;
+        }
         case EDIT_NOTE: {
+            
             const notesList = store.listData.map(el => {
                 
                 if(el.id == action.noteId) {
-                    let inputObjectKey = action.editedInputName
-                    let inputEditedValue = {[inputObjectKey]: action.editedInputText}
+                    let inputEditedValue = action.editedValues
                     return {...el, ...inputEditedValue}
                 } else {
                     return el
                 }  
             })
             store.listData = [...notesList]
-            renderNoteList(store)
             break;
         }
         case DELETE_NOTE: {
             store.listData = store.listData.filter(el => el.id !== action.noteId)
-            
+            reRenderNotes()
+        }
+        break;
 
-            renderNoteList(store)
+        case ADD_NOTE: {
+            store = {...store, listData: [...store.listData, action.newNote]}
+            reRenderNotes()
+        }
+        break;
+
+        default: {
+            reRenderNotes()
         }
     } 
+};
+
+export const reRenderNotes = () => {
+    renderNoteList(store.listData, imagePaths);
+};
+
+export const getArchivedFlag = () => store.showArchived;
+
+export const unArchiveNote = (noteId) => {
+    editNoteReducer({type: UNARCHIVE_NOTE, noteId: noteId});
 }
 
+export const archiveNote = (noteId) => {
+    editNoteReducer({type: ARCHIVE_NOTE, noteId: noteId});
+}
+
+export const getListLength = () => store.listData.length;
 
 
-
+export const getCategoriesList = () => store.categoriesList;
