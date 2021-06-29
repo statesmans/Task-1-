@@ -1,9 +1,9 @@
-import { reRenderNotes } from './store.js'
-import { addNewNoteListener, showArchiveListener } from './listeners.js'
+import { getInitialValues } from './store.js';
+import { addNewNoteListener, showArchiveListener } from './listeners.js';
+import renderNoteList from './render.js';
 
+const noteList = getInitialValues();
 
-
-
-reRenderNotes()
-addNewNoteListener()
-showArchiveListener()
+renderNoteList(noteList);
+addNewNoteListener();
+showArchiveListener();

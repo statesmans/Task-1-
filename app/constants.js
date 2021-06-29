@@ -1,4 +1,4 @@
-export const imagePaths = { 
+const imagePaths = { 
     task: 'images/task.png',
     randomThought: 'images/thought.png',
     idea: 'images/idea.png',
@@ -6,4 +6,6 @@ export const imagePaths = {
     archiveBtn: 'images/archiveBtn.svg',
     editBtn: 'images/edit.svg',
     deleteBtn: 'images/delete.svg'
-}
+};
+
+export default imagePaths

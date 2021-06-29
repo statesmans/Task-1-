@@ -1,98 +1,90 @@
-import { getListLength } from './store.js';
+import { getLastId } from './store.js';
+import noteIconPath from './constants.js'
 
 export const getArchiveBtnDOM = (listItem) => {
-    if(listItem.isArchived) {
-        return document.getElementById(`unArchiveBtn${listItem.id}`)
-    } else {
-        return document.getElementById(`archiveBtn${listItem.id}`)
-    }
+  if (listItem.isArchived) {
+    return document.getElementById(`unArchiveBtn${listItem.id}`);
+  }
+  return document.getElementById(`archiveBtn${listItem.id}`);
 };
 
 export const removeListItems = () => {
-    let listBlock = document.getElementById('listContentBlock')
-
-    while(listBlock.firstChild) {
-        listBlock.removeChild(listBlock.firstChild)
-    }
+  const listBlock = document.getElementById('listContentBlock')
+  listBlock.innerHTML = '';
 };
 
 export const getIconPath = (iconPaths, searchedIconType = 'Random Thought')=>{
-    let iconPathStr = '';
+  let iconPathStr = '';
 
-    for(let key in iconPaths) {
-        
-        // delete spaces in category if exist to regExp work fine
-        for(let i = 0; i < searchedIconType.length; i++) {
-
-            if (searchedIconType[i] == ' ') {
-                searchedIconType =  searchedIconType.replace(' ', '')
-            }
-        }
-        
-        // find coincidence of category and pathName
-        let regExp = new RegExp(`${searchedIconType}`,'gi')
-        let result = key.match(regExp)
-        if(result && result.length !== 0 && result.length !== null) {
-            iconPathStr = iconPaths[key]
-        }
-        
+  for (const key in iconPaths) {
+    // delete spaces in category if exist to regExp work fine
+    for (let i = 0; i < searchedIconType.length; i++) {
+      if (searchedIconType[i] == ' ') {
+        searchedIconType =  searchedIconType.replace(' ', '');
+      }
+}
+    // find coincidence of category and pathName
+    const regExp = new RegExp(`${searchedIconType}`,'gi');
+    const result = key.match(regExp);
+    if (result && result.length !== 0 && result.length !== null) {
+      iconPathStr = iconPaths[key];
     }
-    return iconPathStr
-}  
+}
+  return iconPathStr;
+};
 
 export const setDisabledValue = (bool, inputs) => {
-    for(let el of inputs) {
-        el.disabled = bool;
-    }
-}
+  for (const el of inputs) {
+    el.disabled = bool;
+  }
+};
 
 export const getEditableInputsList = (listId) => {
-    const noteItem = document.getElementById(`editBtn${listId}`).closest('.notes__item')
-    return Array.from(noteItem.getElementsByClassName('note__text'))
-}
+  const noteItem = document.getElementById(`editBtn${listId}`).closest('.notes__item');
+  return Array.from(noteItem.getElementsByClassName('note__text'));
+};
 
 export const addNewNote = () => {
-    let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    let listsBlockLength = getListLength()
-    let date = new Date()
-    let dateStr = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const lastId = getLastId();
+  const date = new Date();
+  const dateStr = `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  console.log();
+  const newNote = {
+    id: lastId + 1,
+    name: '',
+    createData: `${dateStr}`,
+    category: 'Random Thought',
+    content: '',
+    schedule: '',
+    isArchived: false
+  };
 
-    let newNote = {
-        id: listsBlockLength + 1,
-        name: '',
-        createData: `${dateStr}`,
-        category: 'Random Thought',
-        content: '',
-        schedule: '',
-        isArchived: false
-    }
+  return newNote;
+};
 
-    return newNote
-}
+export const generateNoteItemDOM = (listItem) => {
+  const listBlock = document.getElementById('listContentBlock');
+  // Get the right path of icon for this note
+  const iconPath = getIconPath(noteIconPath, listItem.category);
 
-export const generateNoteItemDOM = (listItem, noteIconPath) => {
-   
-    let listBlock = document.getElementById('listContentBlock')
-    // Get the right path of icon for this note
-    let iconPath = getIconPath(noteIconPath, listItem.category)
+  const noteItem = document.createElement('div');
 
-    let noteItem = document.createElement('div');
+  if (listItem.isArchived) {
+    noteItem.classList.add('notes__item', 'archived');
+  } else {
+    noteItem.classList.add('notes__item');
+  }
 
-    if(listItem.isArchived) {
-        noteItem.classList.add('notes__item', 'archived')
-    } else {
-        noteItem.classList.add('notes__item')
-    }
-
-    noteItem.innerHTML = `<div class="note__name">
-                            <img class="note__icon" src="${iconPath ? iconPath : 'images/thought.png'}" alt="${listItem.category ? listItem.category : 'Any'}">
+  noteItem.innerHTML = `<div class="note__name">
+                            <img class="note__icon" src="${ iconPath ? iconPath : 'images/thought.png' }" alt="${listItem.category ? listItem.category : 'Any'}">
                             <input class="note__text text__name" type="text" value="${listItem.name}">
                                       
                           </div>
                           <input class="note__text text__createdDate" type="text" value="${listItem.createData ? listItem.createData : ''}">
                           <input class="note__text text__category" type="text" value="${listItem.category ? listItem.category : ''}">
                           <input class="note__text text__content" type="text" value="${listItem.content ? listItem.content : ''}">
-                          <input class="note__text text__schedule" type="date" value="${listItem.schedule ? listItem.schedule : ''}">
+                          ${generateScheduleItem (listItem)}
                           <div class="note__controls controls">
 
                             <div class="controls__item">
@@ -119,55 +111,71 @@ export const generateNoteItemDOM = (listItem, noteIconPath) => {
                                 </svg>
                             </div>
                           </div>`;
-    listBlock.appendChild(noteItem);
+  listBlock.appendChild(noteItem);
 
-    const noteTextAreas = Array.from(document.getElementsByClassName("note__text"))
-    noteTextAreas.forEach(el => el.disabled = true)       
-}
+  const noteTextAreas = Array.from(document.getElementsByClassName('note__text'));
+  noteTextAreas.forEach((el) => el.disabled = true);
+};
+
+const generateScheduleItem = (listItem) => {
+  if (listItem.schedule.length === 0) {
+    return `<div class='controls__schedule schedule'><input class="note__text text__schedule" type="date" value=""></div>`;
+  } else if (listItem.schedule.length === 1) {
+    return `<div class='controls__schedule schedule'>
+                <p class="schedule__previous">${listItem.schedule[0]}</p>
+                <input class="note__text text__schedule" type="date" value="">
+            </div>
+            `;
+  } else if (listItem.schedule.length === 2) {
+    return `<div class='controls__schedule schedule'>
+                <p class="schedule__previous">${listItem.schedule[0]},</p>
+                <p class="schedule__previous">${listItem.schedule[1]}</p>
+            </div>
+            `;
+  }
+};
 
 export const removeStatisticsList = () => {
-    let statisticBlock = document.querySelector('#statisticList');
-    while(statisticBlock.firstChild) {
-        statisticBlock.removeChild(statisticBlock.firstChild)
-    }
-}
+  const statisticBlock = document.querySelector('#statisticList');
+  while (statisticBlock.firstChild) {
+    statisticBlock.removeChild(statisticBlock.firstChild);
+  }
+};
 
-export const generateStatisticsListDOM = (listData, categoriesList, noteIconPath) => {
-    let statisticBlock = document.querySelector('#statisticList');
-    let statisticIconPath = '';
-    let archivedNoteCount = 0;
-    let activeNoteCount = 0;
-    let currentIterateCategory = '';
+export const generateStatisticsListDOM = (listData, categoriesList) => {
+  const statisticBlock = document.querySelector('#statisticList');
+  let statisticIconPath = '';
+  let archivedNoteCount = 0;
+  let activeNoteCount = 0;
+  let currentIterateCategory = '';
 
-    categoriesList.forEach(category => {
+  categoriesList.forEach((category) => {
+    listData.forEach((listEl) => {
+      if (listEl.category === category) {
+        currentIterateCategory = listEl.category;
+        statisticIconPath = getIconPath(noteIconPath, category);
 
-        listData.forEach((listEl) => {
+        if (listEl.isArchived === true) {
+          archivedNoteCount = archivedNoteCount + 1;
+        } else {
+          activeNoteCount = activeNoteCount + 1;
+        }
+      }
+    });
 
-            if(listEl.category == category ) {
-                currentIterateCategory = listEl.category
-                statisticIconPath = getIconPath(noteIconPath, category)
-
-                if(listEl.isArchived == true) {
-                    archivedNoteCount = archivedNoteCount + 1
-                } else {
-                    activeNoteCount = activeNoteCount + 1
-                }
-            }
-        })
-
-        if(archivedNoteCount !== 0 || activeNoteCount !== 0) {
-            let categoryStatItem = document.createElement('div')
-            categoryStatItem.classList.add('statistics__list--item')
-            categoryStatItem.innerHTML = `<div class="statistics__list--name">
+    if (archivedNoteCount !== 0 || activeNoteCount !== 0) {
+      const categoryStatItem = document.createElement('div');
+      categoryStatItem.classList.add('statistics__list--item');
+      categoryStatItem.innerHTML = `<div class="statistics__list--name">
                                             <img class="statisticsIcon" src="${statisticIconPath}">
                                             <p>${currentIterateCategory}</p>
                                          </div>
                                          <p>${activeNoteCount}</p>
-                                         <p>${archivedNoteCount}</p>`
+                                         <p>${archivedNoteCount}</p>`;
 
-            statisticBlock.appendChild(categoryStatItem)
-        }
-        archivedNoteCount = 0;
-        activeNoteCount = 0;
-    })
+      statisticBlock.appendChild(categoryStatItem);
+    }
+    archivedNoteCount = 0;
+    activeNoteCount = 0;
+  });
 }
